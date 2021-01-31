@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercici Promises &amp; Callbacks - IT Acadamey - NodeJs - Sprint1</title>
+    <script type="text/javascript" src="./code.js"></script>
+    <style>
+        .console {
+            background-color: rgb(207, 207, 207);
+            padding: .25em .5em;
+            margin: .25em 0;
+        }
+        
+        .error .labelled {
+            color: red;
+            font-weight: bold;
+        }
+        
+        .error-visible {
+            display: none;
+        }
+        
+        .error .error-visible {
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <article id="resolutionField">
+        <p class="labelled">Please select a resoluion first</p>
+        <input type="radio" id="resolve" name="resolution" value="resolve">
+        <label for="resolve">Resolve</label><br>
+        <input type="radio" id="reject" name="resolution" value="reject">
+        <label for="reject">Reject</label><br>
+        <p>Then choose: </p>
+        <p class="labelled error-visible">Please see errors</p>
+        <button onclick="onResolutionClicked()">Resolution without custom message</button>
+
+        <label for="message">Add custom message to resolution</label>
+        <input type="text" id="message" />
+        <button onclick="onResolutionClicked(true)">Resolution with custom message</button>
+        <div class="console">
+            <h4>Your Level 1 Exercici 1 tasks output:</h4>
+            <p id="console1"></p>
+        </div>
+        <div class="console">
+            <h4>Your Level 1 task 2 output:</h4>
+            <p id="console2"></p>
+        </div>
+
+    </article>
+    <hr>
+    <article>
+        <label for="employeeId">Search employe by Id</label>
+        <input type=number id="employeeId" />
+        <button onClick="onSearchEmployeeClicked('employee')">Search only Employee</button>
+        <button onClick="onSearchEmployeeClicked('salary')">Search Salary</button>
+        <div class="console">
+            <h4>Your employee Searches</h4>
+            <p id="console3"></p>
+        </div>
+    </article>
+
+</body>
+
+</html>
