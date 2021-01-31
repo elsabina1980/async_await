@@ -11,21 +11,32 @@ function handlePromise(resolve, reject) {
     });
 }
 
-function resolve(message = 'Promise did resolved') {
+function resolve(message) {
     console.log(message);
     return message;
 }
 
-function reject(message = "Promise did reject") {
+function reject(message) {
     console.log(message);
     return message;
 }
 
-function handleResolve(message) {
+const resolvedMessage = 'Promise did resolved';
+
+function handleResolve(txt) {
+    const message = txt ?
+        `${resolvedMessage} with: ${txt}` :
+        resolvedMessage;
+
     return handlePromise(resolve.bind(null, message));
 }
 
-function handleReject(message) {
+const rejectMessage = 'Promise did reject';
+
+function handleReject(txt) {
+    const message = txt ?
+        `${rejectMessage} with: ${txt}` :
+        rejectMessage;
     return handlePromise(null, reject.bind(null, message));
 }
 
@@ -34,7 +45,7 @@ const handleWithMessage = (callback) => {
     return callback(message);
 }
 
-async function onResolutionClicked(withMessage = false) {
+function onResolutionClicked(withMessage = false) {
     const resolution = document.querySelector('input[name="resolution"]:checked') && document.querySelector('input[name="resolution"]:checked').value;
     const resolutionField = document.getElementById('resolutionField');
     if (!resolution) {
@@ -45,18 +56,16 @@ async function onResolutionClicked(withMessage = false) {
 
     const isResolved = resolution === 'resolve';
     const handler = isResolved ? handleResolve : handleReject;
-    let result = '';
-    try {
-        result = withMessage ?
-            await handleWithMessage(handler) :
-            await handler();
-
-    } catch (error) {
-        result = error;
-    }
-
+    const deferred = withMessage ? handleWithMessage.bind(null, handler) : handler
     const ele = document.getElementById(`console${withMessage ? 2 : 1}`);
-    ele.innerText = result;
+
+    deferred()
+        .then(response => {
+            ele.innerText = response
+        })
+        .catch(error => {
+            ele.innerText = error
+        })
 }
 
 let employees = [{
@@ -90,7 +99,7 @@ const getEmpleado = (id) => {
     })
 }
 
-const getSalario = async(employee) => {
+const getSalario = (employee) => {
     if (!Object.prototype.hasOwnProperty.call(employee, 'id')) {
         throw new TypeError('getSalario, needs a valid employee entity')
     }
@@ -100,7 +109,7 @@ const getSalario = async(employee) => {
         Promise.reject(new Error(`Could not find a salary for employee with id: ${employee.id}`))
 }
 
-async function onSearchEmployeeClicked(searchProp) {
+function onSearchEmployeeClicked(searchProp) {
     const employeeId = Number(inputEmployee.value)
 
     if (searchProp === 'employee') {
@@ -110,14 +119,17 @@ async function onSearchEmployeeClicked(searchProp) {
             })
             .catch(error => consoleEmployee.innerHTML = error)
     } else {
-        try {
-            const employee = await getEmpleado(employeeId)
-            const salary = await getSalario(employee)
-            consoleEmployee.innerHTML = `The salary of ${employee.name} is : ${salary}`;
-        } catch (error) {
-            console.error(error)
-            consoleEmployee.innerText = error
-        }
+        getEmpleado(employeeId)
+            .then(employee => {
+                return getSalario(employee)
+                    .then(salary => {
+                        consoleEmployee.innerHTML = `The salary of ${employee.name} is : ${salary}`;
+                    })
+            })
+            .catch(error => {
+                console.error(error)
+                consoleEmployee.innerText = error
+            })
     }
 
 }
