@@ -43,3 +43,8 @@ let salaries = [{
 
 - Exercici 2
 Creu una altra arrow function getSalario que rebi com a paràmetre un objecte employee i retorni el seu salari.
+
+### Nivell 3
+---  
+- Exercici 1
+Fixi un element catch a la invocació de la fase anterior que capturi qualsevol error i l'imprimeixi per consola.
